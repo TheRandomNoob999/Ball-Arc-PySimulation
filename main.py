@@ -58,6 +58,51 @@ class arc():
         )
         pygame.draw.arc(self.surface, self.color, rect, self.start_angle, self.end_angle, self.width)
 
+class Ball():
+    def __init__(self, surface, mass, moment, position, friction, collision_type, elasticity, radius, width, object_array, color):
+        self.surface = surface
+        self.mass = mass
+        self.moment = moment
+        self.position = position
+        self.friction = friction
+        self.collision_type = collision_type
+        self.elasticity = elasticity
+        self.radius = radius
+        self.width = width
+        self.object_array = object_array
+        self.color = color
+        self.body = self.create_body()
+    
+    def create_body(self):
+        body = pymunk.Body(self.mass, self.moment)
+        body.position = self.position
+        return body
+    
+    def create_ball(self, space):
+            self.body = self.create_body()
+            shape = pymunk.Circle(self.body, self.radius)
+            shape.friction = self.friction
+            shape.collision_type = self.collision_type
+            shape.elasticity = self.elasticity
+            space.add(self.body, shape)
+            self.object_array.append(self)
+
+    def draw_ball(self):
+            r = self.radius
+            v = self.get_position()
+            rot = self.get_rotation_vector()
+            p = int(v.x), int(flipy(v.y))
+            p2 = p + Vec2d(rot.x, -rot.y) * r * 0.9
+            p2 = int(p2.x), int(p2.y)
+            pygame.draw.circle(self.surface, self.color, p, int(r), self.width)
+            #pygame.draw.line(screen, pygame.Color(0,0,255), p, p2) // Origin Rotation Line
+    
+    def get_position(self):
+        return self.body.position
+    
+    def get_rotation_vector(self):
+        return self.body.rotation_vector
+
 def flipy(y):
     return -y + 800
 
@@ -72,6 +117,7 @@ def main():
 
     balls = []
     testArc = arc(space, screen, (400,400), 200, 0, 300, 10, 10, (0,255,0))    
+    testball = Ball(screen, 10, 100, (400,400), 0.5, COLLTYPE_BALL, 1.1, 10, 2, balls, (255,0,0))
 
     run_physics = True
     SPEED = 1
@@ -87,14 +133,7 @@ def main():
         testArc.create_arc()
 
         if len(balls) < 1:
-            body = pymunk.Body(10, 100)
-            body.position = 400, 400
-            shape = pymunk.Circle(body, 10)
-            shape.friction = 0.5
-            shape.collision_type = COLLTYPE_BALL
-            shape.elasticity = 1.1
-            space.add(body, shape)
-            balls.append(shape)
+            testball.create_ball(space)
 
         if run_physics:
             dt = 1.0 / 60.0
@@ -105,19 +144,12 @@ def main():
         screen.fill(pygame.Color(0,0,0))
 
         for ball in balls:
-            if(not ball.body.position.y < -300):
+            if(not ball.get_position().y < -300):
                 # Draw the ball
-                r = ball.radius
-                v = ball.body.position
-                rot = ball.body.rotation_vector
-                p = int(v.x), int(flipy(v.y))
-                p2 = p + Vec2d(rot.x, -rot.y) * r * 0.9
-                p2 = int(p2.x), int(p2.y)
-                pygame.draw.circle(screen, pygame.Color(255,0,0), p, int(r), 2)
-                pygame.draw.line(screen, pygame.Color(0,0,255), p, p2)
+                ball.draw_ball()
             else:
                 # Off of screen so remove
-                space._remove_shape(ball)
+                space._remove_body(ball.body)
                 balls.remove(ball)
 
         testArc.draw_arc()
