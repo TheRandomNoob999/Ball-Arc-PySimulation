@@ -2,61 +2,11 @@ import pygame
 import math
 import pymunk
 from pymunk import Vec2d
+from Classes import arc
 
 COLLTYPE_DEFAULT = 0
 COLLTYPE_MOUSE = 1
 COLLTYPE_BALL = 2
-
-class arc():
-    def __init__(self, space, surface, center, radius, start_angle, end_angle, width, segments, color):
-        self.space = space
-        self.surface = surface
-        self.center = center
-        self.radius = radius
-        self.start_angle = math.radians(start_angle)
-        self.end_angle = math.radians(end_angle)
-        self.width = width
-        self.segments = segments
-        self.color = color
-        self.segment_shapes = []
-
-    def rotate_arc(self, speed):
-        self.start_angle += speed * (1/60)
-        self.end_angle += speed * (1/60)
-
-    def create_arc(self):
-        points = []
-        angle_range = self.end_angle - self.start_angle
-        
-        # Create points along arc
-        for i in range(self.segments + 1):
-            angle = self.start_angle + angle_range * i / self.segments
-            x = self.center[0] + math.cos(angle) * self.radius
-            y = self.center[1] + math.sin(angle) * self.radius
-            points.append((x, y))
-
-        #Remove old segments
-        for segment in self.segment_shapes:
-            self.space.remove(segment)
-        self.segment_shapes = []
-
-        # Create Collision
-        for i in range(len(points)-1):
-            segment = pymunk.Segment(self.space.static_body, points[i], points[i+1], self.width * 1.5)
-            segment.elasticity = 0.95
-            segment.friction = 0.9
-            segment.collision_type = COLLTYPE_DEFAULT
-            self.space.add(segment)
-            self.segment_shapes.append(segment)
-    
-    def draw_arc(self):
-        rect = pygame.Rect(
-            self.center[0] - self.radius,
-            self.center[1] - self.radius,
-            self.radius * 2,
-            self.radius * 2
-        )
-        pygame.draw.arc(self.surface, self.color, rect, self.start_angle, self.end_angle, self.width)
 
 class Ball():
     def __init__(self, surface, mass, moment, position, friction, collision_type, elasticity, radius, width, object_array, color):
@@ -116,11 +66,10 @@ def main():
     space.gravity = 0.0, -900.0
 
     balls = []
-    testArc = arc(space, screen, (400,400), 200, 0, 300, 10, 10, (0,255,0))    
+    testArc = arc.Arc(position=(400,400), radius=200, width=10, friction=0.9, elasticity=0.95, segments=10, rotation_speed=1,start_angle=0, end_angle=300, color=(0,255,0))
     testball = Ball(screen, 10, 100, (400,400), 0.5, COLLTYPE_BALL, 1.1, 10, 2, balls, (255,0,0))
 
     run_physics = True
-    SPEED = 1
 
     while running:
         for event in pygame.event.get():
@@ -129,8 +78,8 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 run_physics = not run_physics
 
-        testArc.rotate_arc(SPEED)
-        testArc.create_arc()
+        testArc.create_arc(COLLTYPE_DEFAULT, space)
+        testArc.rotate_arc()
 
         if len(balls) < 1:
             testball.create_ball(space)
@@ -152,7 +101,7 @@ def main():
                 space._remove_body(ball.body)
                 balls.remove(ball)
 
-        testArc.draw_arc()
+        testArc.draw_arc(screen)
 
         pygame.display.flip()
         clock.tick(60)
