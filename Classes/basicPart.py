@@ -7,5 +7,5 @@ class BasicPart():
         self.elasticity = kwargs.get('elasticity', 1)
         self.color = kwargs.get('color', (255,255,255))
 
-    def flipy(y, screenYSize):
+    def flipy(self, y, screenYSize):
         return -y + screenYSize
