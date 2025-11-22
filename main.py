@@ -79,6 +79,7 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 run_physics = not run_physics
 
+        # Sets up arcs
         if len(arcs) < arcSet["amount"]:
             new_arc = arc.Arc(
                 position = arcSet["position"],
@@ -93,6 +94,7 @@ def main():
                 end_angle = arcSet["end_angle"]
             )
 
+            # Makes the arcs not overlap
             if len(arcs) >= 1:
                 new_arc.set_radius(new_arc.get_radius() + 100)
                 new_arc.randomize_rotation()
@@ -100,6 +102,7 @@ def main():
                 
             arcs.append(new_arc)
 
+        # Sets up balls
         if len(balls) < ballSet["amount"]:
             new_ball = ball.Ball(
                 mass = ballSet["mass"],
@@ -122,6 +125,7 @@ def main():
         
         screen.fill(pygame.Color(0,0,0))
 
+        # Draw/Spawn Balls
         for x in balls:
             if(not x.get_position().y < -300):
                 # Draw the ball
@@ -131,6 +135,7 @@ def main():
                 space._remove_body(x.body)
                 balls.remove(x)
 
+        # Draw Arcs
         for x in arcs:
             x.rotate_arc()
             x.create_arc_collision(COLLTYPE_DEFAULT, space)
