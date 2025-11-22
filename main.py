@@ -1,5 +1,5 @@
 import pygame
-import math
+import json
 import pymunk
 from pymunk import Vec2d
 from Classes import arc
@@ -9,8 +9,54 @@ COLLTYPE_DEFAULT = 0
 COLLTYPE_MOUSE = 1
 COLLTYPE_BALL = 2
 
-def flipy(y):
-    return -y + 800
+balls = []
+arcs = []
+
+def loadBallSet():
+    with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
+        loadedFile = json.load(read_file)
+    
+    x = loadedFile["ball"][0]
+    pos = (x["positionx"], x["positiony"])
+    color = (x["red"], x["green"], x["blue"])
+
+    loadedSet = {
+        "mass": x["mass"],
+        "moment": x["moment"],
+        "friction": x["friction"],
+        "elasticity": x["elasticity"],
+        "radius": x["radius"],
+        "width": x["width"],
+        "position": pos,
+        "color": color,
+        "amount": x["amount"]
+    }
+
+    return loadedSet
+
+def loadArcSet():
+    with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
+        loadedFile = json.load(read_file)
+    
+    x = loadedFile["arc"][0]
+    pos = (x["positionx"], x["positiony"])
+    color = (x["red"], x["green"], x["blue"])
+
+    loadedSet = {
+        "friction": x["friction"],
+        "elasticity": x["elasticity"],
+        "radius": x["radius"],
+        "width": x["width"],
+        "position": pos,
+        "color": color,
+        "amount": x["amount"],
+        "segments": x["segments"],
+        "rotation_speed": x["rotation_speed"],
+        "start_angle": x["start_angle"],
+        "end_angle": x["end_angle"]
+    }
+
+    return loadedSet
 
 def main():
     pygame.init()
@@ -21,9 +67,8 @@ def main():
     space = pymunk.Space()
     space.gravity = 0.0, -900.0
 
-    balls = []
-    testArc = arc.Arc(position=(400,400), radius=200, width=10, friction=0.9, elasticity=0.95, segments=10, rotation_speed=1,start_angle=0, end_angle=300, color=(0,255,0))
-    testball = ball.Ball(mass=10, moment=100, position=(400,400), friction=0.5, elasticity=1.1, radius=10, width=2, object_array=balls, color=(255,0,0))
+    arcSet = loadArcSet()
+    ballSet = loadBallSet()
 
     run_physics = True
 
@@ -34,11 +79,40 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 run_physics = not run_physics
 
-        testArc.create_arc(COLLTYPE_DEFAULT, space)
-        testArc.rotate_arc()
+        if len(arcs) < arcSet["amount"]:
+            new_arc = arc.Arc(
+                position = arcSet["position"],
+                friction = arcSet["friction"],
+                elasticity = arcSet["elasticity"],
+                radius = arcSet["radius"],
+                width = arcSet["width"],
+                color = arcSet["color"],
+                segments = arcSet["segments"],
+                rotation_speed = arcSet["rotation_speed"],
+                start_angle = arcSet["start_angle"],
+                end_angle = arcSet["end_angle"]
+            )
 
-        if len(balls) < 1:
-            testball.create_ball(space)
+            if len(arcs) >= 1:
+                new_arc.set_radius(new_arc.get_radius() + 100)
+                new_arc.randomize_rotation()
+                arcSet["radius"] += 100
+                
+            arcs.append(new_arc)
+
+        if len(balls) < ballSet["amount"]:
+            new_ball = ball.Ball(
+                mass = ballSet["mass"],
+                moment = ballSet["moment"],
+                position = ballSet["position"],
+                friction = ballSet["friction"],
+                elasticity = ballSet["elasticity"],
+                radius = ballSet["radius"],
+                width = ballSet["width"],
+                color = ballSet["color"]
+            )
+            new_ball.create_ball(space)
+            balls.append(new_ball)
 
         if run_physics:
             dt = 1.0 / 60.0
@@ -57,7 +131,10 @@ def main():
                 space._remove_body(x.body)
                 balls.remove(x)
 
-        testArc.draw_arc(screen)
+        for x in arcs:
+            x.rotate_arc()
+            x.create_arc_collision(COLLTYPE_DEFAULT, space)
+            x.draw_arc(screen)
 
         pygame.display.flip()
         clock.tick(60)

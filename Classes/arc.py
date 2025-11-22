@@ -1,5 +1,6 @@
 from Classes import basicPart
 import math
+import random
 import pymunk
 import pygame
 
@@ -12,12 +13,12 @@ class Arc(basicPart.BasicPart):
         self.start_angle = math.radians(kwargs.get('start_angle', 0))
         self.end_angle = math.radians(kwargs.get('end_angle', 360))
         self.segment_shapes = []
-        
+    
     def rotate_arc(self):
         self.start_angle += self.rotation_speed * (1/60)
         self.end_angle += self.rotation_speed * (1/60)
 
-    def create_arc(self, collision_type, space):
+    def create_arc_collision(self, collision_type, space):
         points = []
         angle_range = self.end_angle - self.start_angle
         
@@ -50,3 +51,14 @@ class Arc(basicPart.BasicPart):
             self.radius * 2
         )
         pygame.draw.arc(surface, self.color, rect, self.start_angle, self.end_angle, self.width)
+    
+    def get_radius(self):
+        return self.radius
+
+    def set_radius(self, newRadius):
+        self.radius = newRadius
+        
+    def randomize_rotation(self):
+        randomOffset = random.uniform(-360, 360)
+        self.start_angle += randomOffset
+        self.end_angle += randomOffset

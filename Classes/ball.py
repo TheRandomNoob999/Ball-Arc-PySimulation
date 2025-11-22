@@ -2,6 +2,7 @@ from Classes import basicPart
 import pymunk
 from pymunk import Vec2d
 import pygame
+import random
 
 class Ball(basicPart.BasicPart):
     def __init__(self, **kwargs):
@@ -9,7 +10,6 @@ class Ball(basicPart.BasicPart):
 
         self.mass = kwargs.get('mass', 100)
         self.moment = kwargs.get('moment', (400,400))
-        self.object_array = kwargs.get('object_array', [])
         self.body = self.create_body()
     
     def create_body(self):
@@ -20,11 +20,10 @@ class Ball(basicPart.BasicPart):
     def create_ball(self, space):
             self.body = self.create_body()
             shape = pymunk.Circle(self.body, self.radius)
-            shape.friction = self.friction
+            shape.friction = self.friction + random.uniform(-0.2,0.5)
             shape.collision_type = 2
             shape.elasticity = self.elasticity
             space.add(self.body, shape)
-            self.object_array.append(self)
 
     def draw_ball(self, surface):
             r = self.radius
