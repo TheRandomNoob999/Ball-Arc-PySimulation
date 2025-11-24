@@ -35,6 +35,12 @@ class Ball(basicPart.BasicPart):
             pygame.draw.circle(surface, self.color, p, int(r), self.width)
             #pygame.draw.line(screen, pygame.Color(0,0,255), p, p2) // Origin Rotation Line
     
+    def get_velocity(self):
+        return self.body.velocity
+    
+    def set_velocity(self, x):
+        self.body.velocity *= x
+
     def get_position(self):
         return self.body.position
     
