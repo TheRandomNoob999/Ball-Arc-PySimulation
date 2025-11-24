@@ -130,6 +130,10 @@ def main():
             if(not x.get_position().y < -300):
                 # Draw the ball
                 x.draw_ball(screen)
+
+                # Caps velocity
+                if(x.get_velocity().length > 1000):
+                    x.set_velocity(0.99)
             else:
                 # Off of screen so remove
                 space._remove_body(x.body)
