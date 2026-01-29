@@ -4,13 +4,11 @@ import pymunk
 from pymunk import Vec2d
 from Classes import arc
 from Classes import ball
+from Classes import pygameGUI as pGUI
 
 COLLTYPE_DEFAULT = 0
 COLLTYPE_MOUSE = 1
 COLLTYPE_BALL = 2
-
-balls = []
-arcs = []
 
 def loadBallSet():
     with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
@@ -63,6 +61,7 @@ def main():
     screen = pygame.display.set_mode((800, 800))
     clock = pygame.time.Clock()
     running = True
+    leftMouseButtonDown = False
 
     space = pymunk.Space()
     space.gravity = 0.0, -900.0
@@ -72,12 +71,29 @@ def main():
 
     run_physics = True
 
+    balls = []
+    arcs = []
+    buttons = []
+
+    test_button = pGUI.button(10, 10, 150, 25, (255,255,0), "Settings")
+    buttons.append(test_button)
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                running = False # Exit the main loop
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                run_physics = not run_physics
+                run_physics = not run_physics # Toggle physics on/off
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed(3)[0]:
+                    leftMouseButtonDown = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if pygame.mouse.get_pressed(3)[0] == False:
+                    if leftMouseButtonDown:
+                        for x in buttons:
+                            x.mouseClicked(pygame.mouse.get_pos())
+                        leftMouseButtonDown = False
+
 
         # Sets up arcs
         if len(arcs) < arcSet["amount"]:
@@ -144,6 +160,10 @@ def main():
             x.rotate_arc()
             x.create_arc_collision(COLLTYPE_DEFAULT, space)
             x.draw_arc(screen)
+        
+        # Draw Buttons
+        for x in buttons:
+            x.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
