@@ -73,10 +73,12 @@ def main():
 
     balls = []
     arcs = []
-    buttons = []
+    guiElements = []
 
-    test_button = pGUI.button(10, 10, 150, 25, (255,255,0), "Settings")
-    buttons.append(test_button)
+    test_button = pGUI.button(10, 10, 150, 25, backgroundColor=(192,192,192), label="Presets", autoSize=True, paddingX=10, paddingY=10)
+    test_label = pGUI.labelFrame(800-156, 700+51, 100, 100, label="ver 0.3.0", paddingX=10, paddingY=10, autoSize=True)
+    guiElements.append(test_button)
+    guiElements.append(test_label)
 
     while running:
         for event in pygame.event.get():
@@ -89,10 +91,12 @@ def main():
                     leftMouseButtonDown = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 if pygame.mouse.get_pressed(3)[0] == False:
-                    if leftMouseButtonDown:
-                        for x in buttons:
-                            x.mouseClicked(pygame.mouse.get_pos())
-                        leftMouseButtonDown = False
+                    for element in guiElements:
+                        if callable(getattr(element, "mouseClicked", None)):
+                            if leftMouseButtonDown:
+                                if element.mouseClicked(pygame.mouse.get_pos()):
+                                    break
+                                leftMouseButtonDown = False
 
 
         # Sets up arcs
@@ -161,9 +165,10 @@ def main():
             x.create_arc_collision(COLLTYPE_DEFAULT, space)
             x.draw_arc(screen)
         
-        # Draw Buttons
-        for x in buttons:
+        # Draw GUI
+        for x in guiElements:
             x.draw(screen)
+
 
         pygame.display.flip()
         clock.tick(60)
