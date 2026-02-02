@@ -1,4 +1,4 @@
-from Classes import basicPart
+from Components import basicPart
 import math
 import random
 import pymunk

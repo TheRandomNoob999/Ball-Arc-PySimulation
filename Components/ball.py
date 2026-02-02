@@ -1,4 +1,4 @@
-from Classes import basicPart
+from Components import basicPart
 import pymunk
 from pymunk import Vec2d
 import pygame

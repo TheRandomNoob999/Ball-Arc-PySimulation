@@ -30,6 +30,7 @@ class labelFrame(pygame.Rect):
 class button(labelFrame):
     def __init__(self, left, top, width, height, **kwargs):
         super().__init__(left, top, width, height, **kwargs)
+        self.func = kwargs.get("func", self.default)
 
     def mouseClicked(self, mouse_pos):
         if (mouse_pos[1] < self.height + self.top and mouse_pos[1] > self.top and
@@ -39,5 +40,8 @@ class button(labelFrame):
             return True
         return False
 
+    def default(self):
+        print("This button was pressed!")
+
     def action(self):
-        print("Button is clicked")
+        self.func()

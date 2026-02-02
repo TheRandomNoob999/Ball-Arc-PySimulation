@@ -2,13 +2,25 @@ import pygame
 import json
 import pymunk
 from pymunk import Vec2d
-from Classes import arc
-from Classes import ball
-from Classes import pygameGUI as pGUI
+from Components import arc
+from Components import ball
+from Components import pygameGUI as pGUI
 
 COLLTYPE_DEFAULT = 0
 COLLTYPE_MOUSE = 1
 COLLTYPE_BALL = 2
+SCREENSIZE = (800,800)
+
+def getFontSize(size, text):
+    font = pygame.font.Font('freesansbold.ttf', size)
+    return font.size(text)
+
+def createEssentialGUI():
+    presetButton = pGUI.button(left=10, top=10, width=800, height=25, backgroundColor=(192,192,192), label="Presets", autoSize=True, paddingX=10, paddingY=10)
+    versionLabel = pGUI.labelFrame(left=SCREENSIZE[0]-getFontSize(20, "ver 0.3.0")[0] - 10, top=SCREENSIZE[1]-getFontSize(20, "ver 0.3.0")[1] - 10, width=0, height=0, autoSize=True, textSize=20, label="ver 0.3.0", paddingX=10, paddingY=10)
+    settingsButton = pGUI.button(left=10, top=SCREENSIZE[1]-51, width=0, height=0, autoSize=True, label="Settings", paddingX=10, paddingY=10)
+
+    return presetButton, versionLabel, settingsButton
 
 def loadBallSet():
     with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
@@ -58,7 +70,7 @@ def loadArcSet():
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((800, 800))
+    screen = pygame.display.set_mode(SCREENSIZE)
     clock = pygame.time.Clock()
     running = True
     leftMouseButtonDown = False
@@ -73,12 +85,7 @@ def main():
 
     balls = []
     arcs = []
-    guiElements = []
-
-    test_button = pGUI.button(10, 10, 150, 25, backgroundColor=(192,192,192), label="Presets", autoSize=True, paddingX=10, paddingY=10)
-    test_label = pGUI.labelFrame(800-156, 700+51, 100, 100, label="ver 0.3.0", paddingX=10, paddingY=10, autoSize=True)
-    guiElements.append(test_button)
-    guiElements.append(test_label)
+    guiElements = [createEssentialGUI()[0], createEssentialGUI()[1], createEssentialGUI()[2]]
 
     while running:
         for event in pygame.event.get():
@@ -168,7 +175,6 @@ def main():
         # Draw GUI
         for x in guiElements:
             x.draw(screen)
-
 
         pygame.display.flip()
         clock.tick(60)
