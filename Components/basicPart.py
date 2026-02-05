@@ -7,6 +7,8 @@ class BasicPart():
         self.elasticity = kwargs.get('elasticity', 1)
         self.color = kwargs.get('color', (255,255,255))
         self.amount = kwargs.get('amount', 1)
+        self.space = kwargs.get('space', None)
+        self.screen = kwargs.get('screen', None)
 
     def get_amount(self):
         return self.amount
