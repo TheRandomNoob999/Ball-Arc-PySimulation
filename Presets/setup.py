@@ -1,47 +1,40 @@
-import json
+import yaml
 
 def loadBallSet() -> dict:
-    with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
-        loadedFile = json.load(read_file)
-    
-    x = loadedFile["ball"][0]
-    pos = (x["positionx"], x["positiony"])
-    color = (x["red"], x["green"], x["blue"])
+    with open("Presets\default.yaml", "r") as read_file:
+        loadedFile = yaml.safe_load(read_file)
 
     loadedSet = {
-        "mass": x["mass"],
-        "moment": x["moment"],
-        "friction": x["friction"],
-        "elasticity": x["elasticity"],
-        "radius": x["radius"],
-        "width": x["width"],
-        "position": pos,
-        "color": color,
-        "amount": x["amount"]
+        "mass": loadedFile['ball']['mass'],
+        "moment": loadedFile['ball']['moment'],
+        "friction": loadedFile['ball']['friction'],
+        "elasticity": loadedFile['ball']['elasticity'],
+        "radius": loadedFile['ball']['radius'],
+        "width": loadedFile['ball']['width'],
+        "position": loadedFile['ball']['position'],
+        "color": loadedFile['ball']['color'],
+        "amount": loadedFile['ball']['amount']
     }
 
     return loadedSet
 
 def loadArcSet() -> dict:
-    with open("Presets\default.json", mode="r", encoding="utf-8") as read_file:
-        loadedFile = json.load(read_file)
+    with open("Presets\default.yaml", "r") as read_file:
+        loadedFile = yaml.safe_load(read_file)
     
-    x = loadedFile["arc"][0]
-    pos = (x["positionx"], x["positiony"])
-    color = (x["red"], x["green"], x["blue"])
-
     loadedSet = {
-        "friction": x["friction"],
-        "elasticity": x["elasticity"],
-        "radius": x["radius"],
-        "width": x["width"],
-        "position": pos,
-        "color": color,
-        "amount": x["amount"],
-        "segments": x["segments"],
-        "rotation_speed": x["rotation_speed"],
-        "start_angle": x["start_angle"],
-        "end_angle": x["end_angle"]
+        "friction": loadedFile['arc']['friction'],
+        "elasticity": loadedFile['arc']['elasticity'],
+        "radius": loadedFile['arc']['radius'],
+        "width": loadedFile['arc']['width'],
+        "position": loadedFile['arc']['position'],
+        "color": loadedFile['arc']['color'],
+        "amount": loadedFile['arc']['amount'],
+        "segments": loadedFile['arc']['segments'],
+        "rotation_speed": loadedFile['arc']['rotation_speed'],
+        "start_angle": loadedFile['arc']['start_angle'],
+        "end_angle": loadedFile['arc']['end_angle']
     }
 
     return loadedSet
+

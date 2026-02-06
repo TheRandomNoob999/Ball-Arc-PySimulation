@@ -1,2 +1,2 @@
 import pygame
-import objects as obj
+import Components.objects as obj

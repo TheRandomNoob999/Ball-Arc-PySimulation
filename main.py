@@ -1,10 +1,7 @@
 import pygame
 import pymunk
-from Components import arc
-from Components import ball
 from Core import constants as const
-from Core import objects as obj
-from Presets import setup
+from Components import objects as obj
 from GUI import elements as gui
 
 def main():
@@ -19,7 +16,7 @@ def main():
     run_physics = True
 
     obj.addGUI(gui.settingsElement())
-    obj.addGUI(gui.presetElement())
+    obj.addGUI(gui.presetOptionsElement([gui.presetElement()]))
     obj.addGUI(gui.versionElement())
 
     while running:
