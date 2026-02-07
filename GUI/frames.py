@@ -10,7 +10,7 @@ def loadStandardGUI(objectManager) -> None:
         if filename.endswith(".yaml"):
             with open(filename, "r") as read_file:
                 loadedFile = yaml.safe_load(read_file)
-            newButton = gui.presetElement(loadedFile["name"], filename, objectManager)
+            newButton = gui.presetElement(loadedFile["name"], filename, objectManager,loadedFile["fontSize"])
             presetButtons.append(newButton)
 
 

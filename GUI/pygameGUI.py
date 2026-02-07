@@ -58,8 +58,10 @@ class dropDownMenu(button):
         print("Dropdown menu clicked")
         if not self.open:
             self.open = True
+            optionCount = 0
             for option in self.menuOptions:
-                option.update(self.left, self.top + self.height, self.width, self.height)
+                optionCount += 1
+                option.update(self.left, self.top + self.height*optionCount, self.width, self.height)
                 self.objectManager.addGUI(option)
         else:
             self.open = False

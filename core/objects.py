@@ -1,8 +1,9 @@
 from Presets import loaders as sets
 from Components import arc
 from Components import ball
+from Core import app
 
-class objectManager():
+class ObjectManager():
     def __init__(self, space):
         self.space = space
         self.BALLSET = {}
@@ -10,27 +11,38 @@ class objectManager():
         self.BALLS = []
         self.ARCS = []
         self.GUI_ELEMENTS = []
+        self.run_BallPhysics = True
+        self.run_ArcPhysics = True
     
     def step(self):
-        dt = 1.0 / 60.0
-        for x in range(1):
-            self.space.step(dt)
+        if self.run_BallPhysics:
+            dt = 1.0 / 60.0
+            for x in range(1):
+                self.space.step(dt)
+
+    def deLoadSet(self) -> None:
+        app.runningSimulation = False
+        self.ARCSET = {}
+        self.BALLSET = {}
+        for ball in self.BALLS[:]:
+            self.removeBall(ball)
+        for arc in self.ARCS[:]:
+            self.removeArc(arc)
 
     def loadSets(self, fileName) -> None:
-        for ball in self.BALLS:
-            self.removeBall(ball)
-        for arc in self.ARCS:
-            for segment in arc.segment_shapes:
-                self.space.remove(segment)
-            self.ARCS.remove(arc)
-
+        self.run_BallPhysics = False
+        self.deLoadSet()
         self.ARCSET = sets.loadArcSet(fileName)
         self.BALLSET = sets.loadBallSet(fileName)
+        self.run_BallPhysics = True
+        app.runningSimulation = True
         print("LOADED SET: " + fileName)
 
     def addArcs(self, _space, _screen) -> None:
         if self.ARCSET != {}:
-            if len(self.ARCS) < self.ARCSET["amount"]:
+            arcCountOffset = -1
+            while len(self.ARCS) < self.ARCSET["amount"]:
+                    arcCountOffset += 1
                     new_arc = arc.Arc(
                         position = self.ARCSET["position"],
                         friction = self.ARCSET["friction"],
@@ -48,15 +60,14 @@ class objectManager():
 
                     # Makes the arcs not overlap
                     if len(self.ARCS) >= 1:
-                        new_arc.set_radius(new_arc.get_radius() + 100)
+                        new_arc.set_radius(new_arc.get_radius() + 100*arcCountOffset)
                         new_arc.randomize_rotation()
-                        self.ARCSET["radius"] += 100
 
                     self.ARCS.append(new_arc)
 
     def addBalls(self, _space, _screen) -> None:
         if self.BALLSET != {}:
-            if len(self.BALLS) < self.BALLSET["amount"]:
+            while len(self.BALLS) < self.BALLSET["amount"]:
                    new_ball = ball.Ball(
                        mass = self.BALLSET["mass"],
                        moment = self.BALLSET["moment"],
@@ -75,6 +86,11 @@ class objectManager():
     def removeBall(self, ball) -> None:
         self.space.remove(ball.shape, ball.body)
         self.BALLS.remove(ball)
+
+    def removeArc(self, arc) -> None:
+        for segment in arc.segment_shapes:
+                self.space.remove(segment)
+        self.ARCS.remove(arc)
 
     def drawArcs(self) -> None:
       for arc in self.ARCS:

@@ -7,7 +7,7 @@ def events(objectManager) -> None:
         if event.type == pygame.QUIT:
             app.runningApp = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            app.run_BallPhysics = not app.run_BallPhysics
+            objectManager.run_BallPhysics = not objectManager.run_BallPhysics
         elif event.type == pygame.MOUSEBUTTONUP:
             if pygame.mouse.get_pressed(3)[0] == False:
                 for element in objectManager.GUI_ELEMENTS:

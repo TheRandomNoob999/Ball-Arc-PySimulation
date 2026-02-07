@@ -9,6 +9,6 @@ window = pygame.display.set_mode(const.SCREENSIZE)
 clock = pygame.time.Clock()
 space = pymunk.Space()
 space.gravity = const.GRAVITY
-objectManager = obj.objectManager(space)
+objectManager = obj.ObjectManager(space)
 
 print("Setup complete")

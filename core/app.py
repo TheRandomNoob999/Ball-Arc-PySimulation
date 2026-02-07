@@ -4,9 +4,8 @@ from GUI import frames
 from Core import input
 from Core import constants as const
 
-run_BallPhysics = True
-run_ArcPhysics = True
 runningApp = True
+runningSimulation = False
 
 def run() -> None:
     gameLoop(setup.window, setup.clock, setup.space, setup.objectManager)
@@ -18,20 +17,17 @@ def gameLoop(screen, clock, space, objectManager) -> None:
     while runningApp:
         input.events(objectManager)
 
-        if run_BallPhysics:
-            dt = 1.0 / 60.0
-            for x in range(1):
-                space.step(dt)
-
         screen.fill(const.BLACK)
 
         objectManager.drawGUI(screen)
-        objectManager.addBalls(space, screen)
-        objectManager.addArcs(space, screen)
-        
-        objectManager.drawArcs()
-        objectManager.drawBalls()
 
+        if runningSimulation:
+            objectManager.addBalls(space, screen)
+            objectManager.addArcs(space, screen)
+            objectManager.drawArcs()
+            objectManager.drawBalls()
+
+        objectManager.step()
         pygame.display.flip()
         clock.tick(60)
 

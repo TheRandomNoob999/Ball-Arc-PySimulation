@@ -1,8 +1,8 @@
-name: Default
-fontSize: 32
+name: Losts of Balls
+fontSize: 20
 
 ball:
-  amount: 1
+  amount: 5
   mass: 10
   moment: 100
   position: [400,400]
@@ -13,9 +13,9 @@ ball:
   color: [255,0,0]
 
 arc:
-  amount: 1
+  amount: 2
   position: [400,400]
-  radius: 200
+  radius: 150
   width: 10
   friction: 0.9
   elasticity: 0.95
