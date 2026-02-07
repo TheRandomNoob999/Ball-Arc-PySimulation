@@ -1,13 +1,16 @@
 import os
+import yaml
 from Core import objects as obj
 from GUI import elements as gui
 
 def loadStandardGUI(objectManager) -> None:
     presetButtons = []
     for file in os.listdir(os.fsencode("Presets")):
-        filename = os.fsdecode(file)
+        filename = "Presets\\" + os.fsdecode(file)
         if filename.endswith(".yaml"):
-            newButton = gui.presetElement(filename.split('.')[0].capitalize(), objectManager)
+            with open(filename, "r") as read_file:
+                loadedFile = yaml.safe_load(read_file)
+            newButton = gui.presetElement(loadedFile["name"], filename, objectManager)
             presetButtons.append(newButton)
 
 

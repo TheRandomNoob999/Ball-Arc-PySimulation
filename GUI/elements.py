@@ -11,5 +11,5 @@ def presetOptionsElement(menu, manager) -> pGUI.dropDownMenu:
 def versionElement() -> pGUI.labelFrame:
     return pGUI.labelFrame(left=const.SCREENSIZE[0]-pGUI.getFontSize(20, const.VERSION)[0] - 10, top=const.SCREENSIZE[1]-pGUI.getFontSize(20, const.VERSION)[1] - 10, width=0, height=0, autoSize=True, textSize=20, label=const.VERSION, paddingX=10, paddingY=10)
 
-def presetElement(filename, manager) -> pGUI.button:
-    return  pGUI.button(left=10, top=10, width=150, height=25, backgroundColor=(192,192,192), label=filename, autoSize=True, paddingX=10, paddingY=10, func=lambda: act.presetAction(filename, manager))
+def presetElement(name, fileName, manager) -> pGUI.button:
+    return  pGUI.button(left=10, top=10, width=150, height=25, backgroundColor=(192,192,192), label=name, autoSize=True, paddingX=10, paddingY=10, func=lambda: act.presetAction(fileName, manager))
