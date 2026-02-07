@@ -22,5 +22,6 @@ arc:
   segments: 10
   rotation_speed: 1
   start_angle: 0
-  end_angle: 300
+  end_angle: 280
   color: [0,255,0]
+  offset: 100

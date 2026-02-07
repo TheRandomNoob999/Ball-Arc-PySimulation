@@ -18,15 +18,13 @@ def gameLoop(screen, clock, space, objectManager) -> None:
         input.events(objectManager)
 
         screen.fill(const.BLACK)
-
-        objectManager.drawGUI(screen)
-
         if runningSimulation:
             objectManager.addBalls(space, screen)
             objectManager.addArcs(space, screen)
             objectManager.drawArcs()
             objectManager.drawBalls()
-
+        
+        objectManager.drawGUI(screen)
         objectManager.step()
         pygame.display.flip()
         clock.tick(60)

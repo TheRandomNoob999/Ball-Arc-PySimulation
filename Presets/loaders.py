@@ -33,7 +33,8 @@ def loadArcSet(fileName) -> dict:
         "segments": loadedFile['arc']['segments'],
         "rotation_speed": loadedFile['arc']['rotation_speed'],
         "start_angle": loadedFile['arc']['start_angle'],
-        "end_angle": loadedFile['arc']['end_angle']
+        "end_angle": loadedFile['arc']['end_angle'],
+        "offset": loadedFile['arc']['offset']
     }
 
     return loadedSet

@@ -1,8 +1,8 @@
-name: Default
-fontSize: 32
+name: Losts of Rings
+fontSize: 19
 
 ball:
-  amount: 1
+  amount: 2
   mass: 10
   moment: 100
   position: [400,400]
@@ -13,15 +13,15 @@ ball:
   color: [255,0,0]
 
 arc:
-  amount: 1
+  amount: 5
   position: [400,400]
-  radius: 200
+  radius: 120
   width: 10
   friction: 0.9
   elasticity: 0.95
   segments: 10
   rotation_speed: 1
   start_angle: 0
-  end_angle: 300
+  end_angle: 270
   color: [0,255,0]
-  offset: 100
+  offset: 75

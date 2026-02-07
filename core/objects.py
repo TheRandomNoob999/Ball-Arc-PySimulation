@@ -60,7 +60,7 @@ class ObjectManager():
 
                     # Makes the arcs not overlap
                     if len(self.ARCS) >= 1:
-                        new_arc.set_radius(new_arc.get_radius() + 100*arcCountOffset)
+                        new_arc.set_radius(new_arc.get_radius() + self.ARCSET["offset"]*arcCountOffset)
                         new_arc.randomize_rotation()
 
                     self.ARCS.append(new_arc)
