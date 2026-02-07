@@ -53,7 +53,7 @@ class Arc(basicPart.BasicPart):
             self.radius * 2
         )
         pygame.draw.arc(self.screen, self.color, rect, self.start_angle, self.end_angle, self.width)
-    
+
     def get_radius(self):
         return self.radius
 

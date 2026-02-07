@@ -1,5 +1,5 @@
 import pygame
-from Components import objects as obj
+from Core import objects as obj
 
 class labelFrame(pygame.Rect):
     def __init__(self, left, top, width, height, **kwargs) -> None:
@@ -52,6 +52,7 @@ class dropDownMenu(button):
         super().__init__(left, top, width, height, **kwargs)
         self.menuOptions = kwargs.get("menu", None)
         self.open = False
+        self.objectManager = kwargs.get("manager", None)
     
     def action(self) -> None:
         print("Dropdown menu clicked")
@@ -59,11 +60,11 @@ class dropDownMenu(button):
             self.open = True
             for option in self.menuOptions:
                 option.update(self.left, self.top + self.height, self.width, self.height)
-                obj.addGUI(option)
+                self.objectManager.addGUI(option)
         else:
             self.open = False
             for option in self.menuOptions:
-                obj.removeGUI(option)
+                self.objectManager.removeGUI(option)
 
 def getFontSize(size, text):
     font = pygame.font.Font('freesansbold.ttf', size)

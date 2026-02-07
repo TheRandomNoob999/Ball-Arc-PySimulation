@@ -1,5 +1,7 @@
 def settingsAction() -> None:
     print("This is the settings button")
 
-def presetAction() -> None:
-    print("This is the preset button")
+def presetAction(name, objectManager) -> None:
+    fileName = "Presets\\" + name + ".yaml"
+    print("LOADING SET: " + fileName)
+    objectManager.loadSets(fileName)

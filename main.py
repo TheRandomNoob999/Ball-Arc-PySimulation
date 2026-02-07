@@ -1,7 +1,8 @@
 import pygame
 import pymunk
+from Core import app
 from Core import constants as const
-from Components import objects as obj
+from Core import objects as obj
 from GUI import elements as gui
 
 def main():
@@ -53,6 +54,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run()
 else:
     print("huh")

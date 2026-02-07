@@ -1,7 +1,7 @@
 import yaml
 
-def loadBallSet() -> dict:
-    with open("Presets\default.yaml", "r") as read_file:
+def loadBallSet(fileName) -> dict:
+    with open(fileName, "r") as read_file:
         loadedFile = yaml.safe_load(read_file)
 
     loadedSet = {
@@ -18,8 +18,8 @@ def loadBallSet() -> dict:
 
     return loadedSet
 
-def loadArcSet() -> dict:
-    with open("Presets\default.yaml", "r") as read_file:
+def loadArcSet(fileName) -> dict:
+    with open(fileName, "r") as read_file:
         loadedFile = yaml.safe_load(read_file)
     
     loadedSet = {
