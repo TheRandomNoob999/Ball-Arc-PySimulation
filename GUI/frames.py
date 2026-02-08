@@ -1,6 +1,5 @@
 import os
 import yaml
-from Core import objects as obj
 from GUI import elements as gui
 from GUI import actions as act
 
@@ -24,14 +23,10 @@ def loadSettingsGUI(objectManager) -> None:
     closeButton = gui.closeElement()
     stopSimulationButton = gui.stopSimulationElement()
 
+    closeButton.update(650, 0, 50, 50)
+    closeButton.setFunc(lambda: act.closeAction(closeButton.parent, objectManager))
+
     mainFrame.addChild(closeButton)
     mainFrame.addChild(stopSimulationButton)
-
-    closeButton.update(650, 0, 50, 50)
-    print(closeButton.backgroundColor)
-    closeButton.setParent(mainFrame)
-    closeButton.func = lambda: act.closeAction(closeButton.getParent(), objectManager)
-
-    stopSimulationButton.setParent(mainFrame)
 
     objectManager.addGUI(mainFrame)

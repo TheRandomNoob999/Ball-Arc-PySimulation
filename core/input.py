@@ -2,7 +2,7 @@ import pygame
 from Core import objects as obj
 from Core import app
 
-def checkForButtonClick(button):
+def checkForButtonClick(button) -> None:
     if callable(getattr(button, "mouseClicked", None)):
         button.mouseClicked(pygame.mouse.get_pos())
 
