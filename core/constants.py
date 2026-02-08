@@ -1,3 +1,5 @@
+#region Simulation Properties
+
 COLLTYPE_DEFAULT = 0
 COLLTYPE_MOUSE = 1
 COLLTYPE_BALL = 2
@@ -6,4 +8,21 @@ SCREENSIZE = (800,800)
 GRAVITY = (0.0, -900.0)
 VERSION = "ver 0.3.0"
 
+#endregion
+
+#region Pygame Colors
+
 BLACK = (0,0,0)
+WHITE = (255,255,255)
+GREY = (157,157,157)
+RED = (255,0,0)
+PINK = (224, 111, 139)
+BROWN = (73, 60, 43)
+ORANGE = (235, 137, 49)
+YELLOW = (247, 226, 107)
+GREEN = (0,255,0)
+LIGHTGREEN = (163, 206, 39)
+CYAN = (49, 162, 242)
+BLUE = (0,0,255)
+
+#endregion

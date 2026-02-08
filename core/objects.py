@@ -4,7 +4,7 @@ from Components import ball
 from Core import app
 
 class ObjectManager():
-    def __init__(self, space):
+    def __init__(self, space) -> None:
         self.space = space
         self.BALLSET = {}
         self.ARCSET = {}
@@ -14,7 +14,7 @@ class ObjectManager():
         self.run_BallPhysics = True
         self.run_ArcPhysics = True
     
-    def step(self):
+    def step(self) -> None:
         if self.run_BallPhysics:
             dt = 1.0 / 60.0
             for x in range(1):

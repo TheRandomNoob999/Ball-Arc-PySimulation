@@ -6,7 +6,7 @@ import pymunk
 import pygame
 
 class Arc(basicPart.BasicPart):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.segments = kwargs.get('segments', 10)
@@ -16,11 +16,11 @@ class Arc(basicPart.BasicPart):
         self.colltype = const.COLLTYPE_ARC
         self.segment_shapes = []
     
-    def rotate_arc(self):
+    def rotate_arc(self) -> None:
         self.start_angle += self.rotation_speed * (1/60)
         self.end_angle += self.rotation_speed * (1/60)
 
-    def create_arc_collision(self):
+    def create_arc_collision(self) -> None:
         points = []
         angle_range = self.end_angle - self.start_angle
         
@@ -45,7 +45,7 @@ class Arc(basicPart.BasicPart):
             self.space.add(segment)
             self.segment_shapes.append(segment)
     
-    def draw_arc(self):
+    def draw_arc(self) -> None:
         rect = pygame.Rect(
             self.position[0] - self.radius,
             self.position[1] - self.radius,
@@ -54,13 +54,13 @@ class Arc(basicPart.BasicPart):
         )
         pygame.draw.arc(self.screen, self.color, rect, self.start_angle, self.end_angle, self.width)
 
-    def get_radius(self):
+    def get_radius(self) -> int:
         return self.radius
 
-    def set_radius(self, newRadius):
+    def set_radius(self, newRadius) -> None:
         self.radius = newRadius
         
-    def randomize_rotation(self):
+    def randomize_rotation(self) -> None:
         randomOffset = random.uniform(-360, 360)
         self.start_angle += randomOffset
         self.end_angle += randomOffset

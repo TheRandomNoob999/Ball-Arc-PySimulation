@@ -1,5 +1,4 @@
 import pygame
-from Core import objects as obj
 
 class Frame(pygame.Rect):
     def __init__(self, left, top, width, height, **kwargs) -> None:
@@ -10,21 +9,25 @@ class Frame(pygame.Rect):
         self.parent = kwargs.get("parent", None)
         self.children = kwargs.get("children", [])
     
-    def getParent(self):
-        return self.parent
-    
     def setParent(self, object) -> None:
         self.parent = object
-        self.update(self.left + object.left, self.top + object.top, self.width, self.height)
     
     def removeParent(self) -> None:
         self.parent = None
 
     def addChild(self, object) -> None:
         self.children.append(object)
+        object.setParent(self)
+
+        # Moves Child based on Parent
+        object.update(self.left + object.left, self.top + object.top, object.width, object.height)
     
     def removeChild(self, object) -> None:
         self.children.remove(object)
+        object.removeParent()
+
+        # Moves child to original coordinates
+        object.update(object.left, object.top, object.width, object.height)
     
     def getChild(self, target):
         for child in self.getChildren():
@@ -37,11 +40,22 @@ class Frame(pygame.Rect):
         return self.children
     
     def draw(self, surface) -> None:
-        pygame.draw.rect(surface, self.backgroundColor, self)
+        pygame.draw.rect(surface, self.backgroundColor, self.addPadding())
+
+        #Checks and draws all children since they're not added to ObjectManager GUI list
         if len(self.getChildren()) >= 1:
             for child in self.getChildren():
                 if callable(getattr(child, "draw", None)):
                     child.draw(surface)
+
+    def changePadding(self, x, y) -> None:
+        self.paddingX = x
+        self.paddingY = y
+
+    def addPadding(self) -> pygame.Rect:
+        paddingRect = pygame.Rect(self.left + self.paddingX*.5, self.top + self.paddingY*.5, 
+                                  self.width + self.paddingX*.5, self.height + self.paddingY*.5)
+        return paddingRect
 
 class labelFrame(Frame):
     def __init__(self, left, top, width, height, **kwargs) -> None:
@@ -50,7 +64,6 @@ class labelFrame(Frame):
         self.autoSize = kwargs.get("autoSize", False)
         self.textSize = kwargs.get("textSize", 36)
         self.textColor = kwargs.get("color", (0,0,0))
-        self.create_Label()
 
     def create_Label(self) -> None:
         font = pygame.font.Font('freesansbold.ttf', self.textSize)
@@ -58,15 +71,17 @@ class labelFrame(Frame):
             self.update((self.left, self.top), (font.size(self.label)))
         self.text = font.render(self.label, True, self.textColor)
 
-    def addPadding(self) -> pygame.Rect:
-        paddingRect = pygame.Rect(self.left + self.paddingX*.5, self.top + self.paddingY*.5, 
-                                  self.width + self.paddingX*.5, self.height + self.paddingY*.5)
-        return paddingRect
-
     def draw(self, surface) -> None:
+        self.create_Label()
         pygame.draw.rect(surface, self.backgroundColor, self.addPadding())
         if self.label != "":
             surface.blit(self.text, self.text.get_rect(center=self.addPadding().center))
+        
+        #Draws all children since they're not added to ObjectManager GUI list
+        if len(self.getChildren()) >= 1:
+            for child in self.getChildren():
+                if callable(getattr(child, "draw", None)):
+                    child.draw(surface)
 
 class button(labelFrame):
     def __init__(self, left, top, width, height, **kwargs) -> None:
@@ -80,6 +95,9 @@ class button(labelFrame):
             self.action()
             return True
         return False
+    
+    def setFunc(self, function) -> None:
+        self.func = function
 
     def default(self) -> None:
         print("This button was pressed!")
@@ -108,6 +126,6 @@ class dropDownMenu(button):
             for option in self.menuOptions:
                 self.objectManager.removeGUI(option)
 
-def getFontSize(size, text):
+def getFontSize(size, text) -> tuple[int, int]:
     font = pygame.font.Font('freesansbold.ttf', size)
     return font.size(text)
