@@ -1,0 +1,27 @@
+name: Losts of Balls
+fontSize: 20
+
+ball:
+  amount: 5
+  mass: 10
+  moment: 100
+  position: [400,400]
+  friction: 0.5
+  elasticity: 1.1
+  radius: 10
+  width: 2
+  color: [255,0,0]
+
+arc:
+  amount: 2
+  position: [400,400]
+  radius: 150
+  width: 10
+  friction: 0.9
+  elasticity: 0.95
+  segments: 10
+  rotation_speed: 1
+  start_angle: 0
+  end_angle: 280
+  color: [0,255,0]
+  offset: 100

@@ -1,4 +1,5 @@
-from Classes import basicPart
+from Components import basicPart
+from Core import constants as const
 import math
 import random
 import pymunk
@@ -12,13 +13,14 @@ class Arc(basicPart.BasicPart):
         self.rotation_speed = kwargs.get('rotation_speed', 1)
         self.start_angle = math.radians(kwargs.get('start_angle', 0))
         self.end_angle = math.radians(kwargs.get('end_angle', 360))
+        self.colltype = const.COLLTYPE_ARC
         self.segment_shapes = []
     
     def rotate_arc(self):
         self.start_angle += self.rotation_speed * (1/60)
         self.end_angle += self.rotation_speed * (1/60)
 
-    def create_arc_collision(self, collision_type, space):
+    def create_arc_collision(self):
         points = []
         angle_range = self.end_angle - self.start_angle
         
@@ -31,27 +33,27 @@ class Arc(basicPart.BasicPart):
 
         #Remove old segments
         for segment in self.segment_shapes:
-            space.remove(segment)
+            self.space.remove(segment)
         self.segment_shapes = []
 
         # Create Collision
         for i in range(len(points)-1):
-            segment = pymunk.Segment(space.static_body, points[i], points[i+1], self.width * 1.5)
+            segment = pymunk.Segment(self.space.static_body, points[i], points[i+1], self.width * 1.5)
             segment.elasticity = self.elasticity
             segment.friction = self.friction
-            segment.collision_type = collision_type
-            space.add(segment)
+            segment.collision_type = self.colltype
+            self.space.add(segment)
             self.segment_shapes.append(segment)
     
-    def draw_arc(self, surface):
+    def draw_arc(self):
         rect = pygame.Rect(
             self.position[0] - self.radius,
             self.position[1] - self.radius,
             self.radius * 2,
             self.radius * 2
         )
-        pygame.draw.arc(surface, self.color, rect, self.start_angle, self.end_angle, self.width)
-    
+        pygame.draw.arc(self.screen, self.color, rect, self.start_angle, self.end_angle, self.width)
+
     def get_radius(self):
         return self.radius
 
