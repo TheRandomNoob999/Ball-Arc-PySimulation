@@ -1,16 +1,55 @@
 import pygame
 from Core import objects as obj
 
-class labelFrame(pygame.Rect):
+class Frame(pygame.Rect):
     def __init__(self, left, top, width, height, **kwargs) -> None:
         super().__init__(left, top, width, height)
+        self.backgroundColor = kwargs.get("backgroundColor", (255,255,255))
+        self.paddingX = kwargs.get("paddingX", 0)
+        self.paddingY = kwargs.get("paddingY", 0)
+        self.parent = kwargs.get("parent", None)
+        self.children = kwargs.get("children", [])
+    
+    def getParent(self):
+        return self.parent
+    
+    def setParent(self, object) -> None:
+        self.parent = object
+        self.update(self.left + object.left, self.top + object.top, self.width, self.height)
+    
+    def removeParent(self) -> None:
+        self.parent = None
+
+    def addChild(self, object) -> None:
+        self.children.append(object)
+    
+    def removeChild(self, object) -> None:
+        self.children.remove(object)
+    
+    def getChild(self, target):
+        for child in self.getChildren():
+            if child == target:
+                return child 
+        
+        return "Can't find child"
+
+    def getChildren(self) -> list:
+        return self.children
+    
+    def draw(self, surface) -> None:
+        pygame.draw.rect(surface, self.backgroundColor, self)
+        if len(self.getChildren()) >= 1:
+            for child in self.getChildren():
+                if callable(getattr(child, "draw", None)):
+                    child.draw(surface)
+
+class labelFrame(Frame):
+    def __init__(self, left, top, width, height, **kwargs) -> None:
+        super().__init__(left, top, width, height, **kwargs)
         self.label = kwargs.get("label", "")
         self.autoSize = kwargs.get("autoSize", False)
         self.textSize = kwargs.get("textSize", 36)
         self.textColor = kwargs.get("color", (0,0,0))
-        self.backgroundColor = kwargs.get("backgroundColor", (255,255,255))
-        self.paddingX = kwargs.get("paddingX", 0)
-        self.paddingY = kwargs.get("paddingY", 0)
         self.create_Label()
 
     def create_Label(self) -> None:
@@ -26,7 +65,8 @@ class labelFrame(pygame.Rect):
 
     def draw(self, surface) -> None:
         pygame.draw.rect(surface, self.backgroundColor, self.addPadding())
-        surface.blit(self.text, self.text.get_rect(center=self.addPadding().center))
+        if self.label != "":
+            surface.blit(self.text, self.text.get_rect(center=self.addPadding().center))
 
 class button(labelFrame):
     def __init__(self, left, top, width, height, **kwargs) -> None:
