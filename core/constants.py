@@ -6,7 +6,7 @@ COLLTYPE_BALL = 2
 COLLTYPE_ARC = 3
 SCREENSIZE = (800,800)
 GRAVITY = (0.0, -900.0)
-VERSION = "ver 0.3.0"
+VERSION = "ver 0.3.1"
 
 #endregion
 
