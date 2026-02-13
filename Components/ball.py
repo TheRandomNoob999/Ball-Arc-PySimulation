@@ -34,7 +34,7 @@ class Ball(basicPart.BasicPart):
         r = self.radius
         v = self.get_position()
         rot = self.get_rotation_vector()
-        p = int(v.x), int(self.flipy(v.y, 800))
+        p = int(v.x), int(self.flipy(v.y, const.SCREENSIZE[1]))
         p2 = p + Vec2d(rot.x, -rot.y) * r * 0.9
         p2 = int(p2.x), int(p2.y)
         pygame.draw.circle(self.screen, self.color, p, int(r), self.width)

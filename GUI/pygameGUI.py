@@ -8,6 +8,7 @@ class Frame(pygame.Rect):
         self.paddingY = kwargs.get("paddingY", 0)
         self.parent = kwargs.get("parent", None)
         self.children = kwargs.get("children", [])
+        self.id = kwargs.get("id", None)
     
     def setParent(self, object) -> None:
         self.parent = object

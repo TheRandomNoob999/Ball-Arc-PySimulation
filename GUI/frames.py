@@ -21,12 +21,18 @@ def loadStandardGUI(objectManager) -> None:
 def loadSettingsGUI(objectManager) -> None:
     mainFrame = gui.settingsFrame()
     closeButton = gui.closeElement()
+    closeGameButton = gui.closeGameElement()
     stopSimulationButton = gui.stopSimulationElement()
 
     closeButton.update(650, 0, 50, 50)
     closeButton.setFunc(lambda: act.closeAction(closeButton.parent, objectManager))
+    
+    closeGameButton.update(mainFrame.width-closeGameButton.width-closeGameButton.paddingX, 
+                           mainFrame.height-closeGameButton.height-closeGameButton.paddingY,
+                           closeGameButton.width, closeGameButton.height)
 
     mainFrame.addChild(closeButton)
     mainFrame.addChild(stopSimulationButton)
+    mainFrame.addChild(closeGameButton)
 
     objectManager.addGUI(mainFrame)

@@ -5,8 +5,7 @@ from GUI import actions as act
 
 # region Standard GUI
 def settingsElement(manager) -> pGUI.button:
-    settingsButton = pGUI.button(left=10, top=700, width=0, height=0) #Width and Height get set through autoSize
-    settingsButton.autoSize = True
+    settingsButton = pGUI.button(left=10, top=const.SCREENSIZE[1]-56, width=160, height=36)
     settingsButton.backgroundColor = const.WHITE
     settingsButton.label = "Settings"
     settingsButton.changePadding(x=10, y=10)
@@ -15,8 +14,7 @@ def settingsElement(manager) -> pGUI.button:
     return settingsButton
 
 def presetOptionsElement(menu, manager) -> pGUI.dropDownMenu:
-    presetDropDown = pGUI.dropDownMenu(left=10, top=10, width=0, height=0) #Width and Height get set through autoSize
-    presetDropDown.autoSize = True
+    presetDropDown = pGUI.dropDownMenu(left=10, top=10, width=150, height=36)
     presetDropDown.backgroundColor = const.WHITE
     presetDropDown.label = "Presets"
     presetDropDown.changePadding(x=10, y=10)
@@ -58,6 +56,8 @@ def closeElement() -> pGUI.button:
 def settingsFrame() -> pGUI.Frame:
     settingsMainFrame = pGUI.Frame(left=50, top=50, width=700, height=700)
     settingsMainFrame.backgroundColor = const.GREY
+    settingsMainFrame.center = (const.SCREENSIZE[0]/2, const.SCREENSIZE[1]/2)
+    settingsMainFrame.id = "SettingsFrame"
 
     return settingsMainFrame
 
@@ -71,5 +71,14 @@ def stopSimulationElement() -> pGUI.button:
     stopSimulationButton.setFunc(lambda: act.stopSimulationAction(app))
 
     return stopSimulationButton
+
+def closeGameElement() -> pGUI.button:
+    closeGameButton = pGUI.button(left=0, top=0, width=150, height=50) # Left and Top gets changed in Frames
+    closeGameButton.backgroundColor = const.RED
+    closeGameButton.setFunc(lambda: act.closeGameAction(app))
+    closeGameButton.textSize = 28
+    closeGameButton.label = "Close App"
+
+    return closeGameButton
 
 # endregion

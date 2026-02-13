@@ -6,6 +6,7 @@ ball:
   mass: 10
   moment: 100
   position: [400,400]
+  positionCentered: True
   friction: 0.5
   elasticity: 1.1
   radius: 10
@@ -15,6 +16,7 @@ ball:
 arc:
   amount: 5
   position: [400,400]
+  positionCentered: True
   radius: 120
   width: 10
   friction: 0.9
